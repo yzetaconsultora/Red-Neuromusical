@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="./image-slot.js"></script>
+<style>
+body{margin:0;background:#f2f5fa;color:#0e1a3a;font-family:'Urbanist',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#2b5cf0;text-decoration:none}
+a:hover{color:#0b1a4d}
+button{font-family:inherit}
+</style>
+</helmet>
+
+<div style="min-height:100vh;display:flex;flex-direction:column">
+
+<!-- HEADER -->
+<header style="position:sticky;top:0;z-index:20;padding:14px 16px 10px;background:rgba(242,245,250,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)">
+  <div style="max-width:1320px;margin:0 auto;display:flex;flex-wrap:nowrap;gap:8px;align-items:center;justify-content:space-between">
+    <div style="flex:1 1 0;display:flex"><div onClick="{{ goHome }}" style="display:flex;gap:10px;align-items:center;cursor:pointer;flex-shrink:0">
+      <img src="assets/logo-red-neuromusical.png" alt="Red Neuromusical" style="height:52px;width:auto;display:block;margin:-6px 0 -6px -10px">
+    </div></div>
+    <nav style="display:flex;justify-content:center;flex:0 1 auto;min-width:0">
+      <div style="display:flex;flex-wrap:nowrap;gap:2px;overflow-x:auto;scrollbar-width:none;background:#e6ebf5;border-radius:999px;padding:4px;max-width:100%">
+        <sc-for list="{{ nav }}" as="n" hint-placeholder-count="7">
+          <button onClick="{{ n.go }}" style="flex-shrink:0;min-height:40px;padding:0 7px;border:0;border-radius:999px;background:{{ n.bg }};color:{{ n.fg }};box-shadow:{{ n.shadow }};font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap">{{ n.label }}</button>
+        </sc-for>
+      </div>
+    </nav>
+    <div style="flex:1 1 0;display:flex;gap:4px;align-items:center;justify-content:flex-end">
+      <button onClick="{{ toggleLang }}" title="Cambiar idioma" style="width:40px;height:40px;border-radius:50%;border:1px solid #d5ddef;background:#fff;color:#0e1a3a;font-size:12px;font-weight:700;cursor:pointer">{{ langLabel }}</button>
+      <button onClick="{{ goContacto }}" title="WhatsApp" aria-label="WhatsApp" style="width:40px;height:40px;border-radius:50%;border:0;background:#0b1a4d;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.47 14.38c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.25-.46-2.38-1.47-.88-.79-1.47-1.76-1.64-2.05-.17-.3-.02-.46.13-.6.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.07c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.75-.72 2-1.41.25-.69.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35zM12.05 21.5h-.01a9.4 9.4 0 0 1-4.8-1.31l-.34-.2-3.57.93.95-3.48-.22-.36a9.42 9.42 0 0 1-1.44-5.02c0-5.2 4.24-9.44 9.45-9.44 2.52 0 4.89.99 6.67 2.77a9.37 9.37 0 0 1 2.76 6.68c0 5.2-4.24 9.43-9.45 9.43zm8.04-17.47A11.3 11.3 0 0 0 12.05.7C5.78.7.68 5.8.68 12.06c0 2 .52 3.96 1.52 5.68L.58 23.7l6.1-1.6a11.33 11.33 0 0 0 5.37 1.37h.01c6.26 0 11.36-5.1 11.37-11.37 0-3.04-1.18-5.89-3.33-8.04z"></path></svg></button>
+      <button onClick="{{ goContacto }}" style="display:flex;align-items:center;gap:10px;min-height:40px;padding:0 4px 0 14px;border:0;background:#2b5cf0;color:#fff;border-radius:999px;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap">Agendar<span style="width:32px;height:32px;border-radius:50%;background:#fff;color:#2b5cf0;display:flex;align-items:center;justify-content:center">→</span></button>
+    </div>
+  </div>
+    
+</header>
+
+<main style="flex:1">
+
+<!-- ============ INICIO ============ -->
+<sc-if value="{{ isInicio }}" hint-placeholder-val="{{ true }}">
+
+  <section style="width:100%;padding:16px 16px 0">
+    <div style="background:linear-gradient(180deg,#ffffff 0%,#f6f8fe 100%);border-radius:32px;padding:16px max(16px, calc((100vw - 1320px) / 2 + 8px));display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px">
+      <div style="padding:44px 32px 24px;display:flex;flex-direction:column;justify-content:space-between;gap:40px">
+        <div style="display:flex;flex-direction:column;gap:24px">
+          <h1 style="margin:0;font-size:clamp(40px,5vw,66px);line-height:1.02;font-weight:500;letter-spacing:-.03em;text-wrap:balance">{{ slide.a }}<span style="color:#2b5cf0">{{ slide.b }}</span>{{ slide.c }}<span style="color:#2b5cf0">{{ slide.d }}</span></h1>
+          <p style="margin:0;font-size:20px;line-height:1.5;color:#56607e;max-width:36ch;text-wrap:pretty">{{ slide.sub }}</p>
+          <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center">
+            <button onClick="{{ goContacto }}" style="display:flex;align-items:center;gap:12px;min-height:58px;padding:0 8px 0 22px;border:0;background:#2b5cf0;color:#fff;border-radius:999px;font-size:17px;font-weight:600;white-space:nowrap;cursor:pointer;box-shadow:0 10px 24px rgba(43,92,240,.25)">Agendar una conversación inicial<span style="width:42px;height:42px;border-radius:50%;background:#fff;color:#2b5cf0;display:flex;align-items:center;justify-content:center;font-size:18px">→</span></button>
+            <a onClick="{{ goContacto }}" style="font-size:17px;font-weight:600;cursor:pointer;padding:12px 8px">o escríbenos por WhatsApp</a>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:stretch;max-width:480px">
+          <div style="background:#2b5cf0;color:#fff;border-radius:20px;padding:16px 18px;display:flex;flex-direction:column;gap:2px">
+            <strong style="font-size:28px;font-weight:600;letter-spacing:-.02em">4</strong><span style="font-size:14px;color:#dfe7ff">países</span>
+          </div>
+          <div style="background:#fff;border:1px solid #e3e8f2;border-radius:20px;padding:16px 18px;display:flex;flex-direction:column;gap:2px">
+            <strong style="font-size:28px;font-weight:600;letter-spacing:-.02em">7</strong><span style="font-size:14px;color:#56607e">programas terapéuticos</span>
+          </div>
+          <div style="background:#fff;border:1px solid #e3e8f2;border-radius:20px;padding:16px 18px;display:flex;flex-direction:column;gap:2px">
+            <strong style="font-size:28px;font-weight:600;letter-spacing:-.02em">Online</strong><span style="font-size:14px;color:#56607e">y presencial</span>
+          </div>
+        </div>
+      </div>
+      <div style="position:relative;border-radius:24px;overflow:hidden;background:#2b5cf0;min-height:600px">
+        <image-slot id="hero-main" shape="rect" placeholder="Foto: sesión de musicoterapia (familia, manos, instrumentos)" style="position:absolute;inset:0"></image-slot>
+        <div style="position:absolute;right:20px;bottom:20px;display:flex;gap:8px;align-items:center;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-radius:999px;padding:6px 6px 6px 16px">
+          <sc-for list="{{ dots }}" as="d" hint-placeholder-count="3">
+            <button onClick="{{ d.go }}" style="width:{{ d.w }};height:8px;border-radius:999px;border:0;background:{{ d.bg }};cursor:pointer;padding:0;transition:width .2s"></button>
+          </sc-for>
+          <button onClick="{{ prevSlide }}" style="margin-left:8px;width:40px;height:40px;border:1px solid #d5ddef;background:#fff;border-radius:50%;cursor:pointer;font-size:16px;color:#0e1a3a">←</button>
+          <button onClick="{{ nextSlide }}" style="width:40px;height:40px;border:0;background:#2b5cf0;color:#fff;border-radius:50%;cursor:pointer;font-size:16px">→</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cómo empezar -->
+  <section style="max-width:1320px;margin:0 auto;padding:96px 24px 0;display:flex;flex-direction:column;gap:40px">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;align-items:end">
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <span style="font-weight:700;font-size:12px;letter-spacing:.08em;color:#2b5cf0">CÓMO EMPEZAR</span>
+        <h2 style="margin:0;font-size:clamp(32px,3.6vw,48px);line-height:1.08;font-weight:500;letter-spacing:-.02em">Dar el primer paso es simple</h2>
+      </div>
+      <p style="margin:0;font-size:18px;line-height:1.55;color:#56607e;max-width:46ch">Si tú o un familiar recibieron un diagnóstico, te acompañamos desde la primera conversación.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px">
+      <sc-for list="{{ steps }}" as="s" hint-placeholder-count="4">
+        <div style="background:#fff;border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:14px;min-height:260px">
+          <span style="font-size:64px;line-height:1;font-weight:400;color:#c9d6fb;letter-spacing:-.03em">{{ s.num }}</span>
+          <h3 style="margin:auto 0 0;font-size:22px;font-weight:600">{{ s.title }}</h3>
+          <p style="margin:0;font-size:17px;line-height:1.5;color:#56607e">{{ s.text }}</p>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- Programas -->
+  <section style="max-width:1320px;margin:0 auto;padding:96px 24px 0">
+    <div style="background:#fff;border-radius:32px;padding:56px 40px;display:flex;flex-direction:column;gap:40px">
+      <div style="display:flex;flex-direction:column;gap:16px;align-items:center;text-align:center">
+        <span style="font-weight:700;font-size:12px;letter-spacing:.08em;color:#2b5cf0">PROGRAMAS TERAPÉUTICOS</span>
+        <h2 style="margin:0;font-size:clamp(32px,3.6vw,48px);line-height:1.08;font-weight:500;letter-spacing:-.02em">¿En qué podemos <span style="color:#2b5cf0">ayudarte</span>?</h2>
+        <p style="margin:0;font-size:18px;line-height:1.55;color:#56607e;max-width:52ch">Siete áreas de trabajo, cada una con objetivos y actividades propias.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px">
+        <sc-for list="{{ programs }}" as="p" hint-placeholder-count="7">
+          <div onClick="{{ goProgramas }}" style="background:#f6f8fe;border:1px solid #e3e8f2;border-radius:24px;padding:8px;display:flex;flex-direction:column;cursor:pointer;transition:border-color .2s,box-shadow .2s" style-hover="border-color:#2b5cf0;box-shadow:0 12px 30px rgba(43,92,240,.12)">
+            <div style="position:relative;aspect-ratio:4/3;border-radius:18px;overflow:hidden;background:#dfe7ff">
+              <image-slot id="prog-card-{{ p.num }}" shape="rect" placeholder="Imagen del programa" style="position:absolute;inset:0"></image-slot>
+              <span style="position:absolute;left:10px;bottom:10px;padding:6px 12px;border-radius:999px;background:#fff;font-weight:700;font-size:11px;color:#2b5cf0;pointer-events:none">{{ p.num }}</span>
+            </div>
+            <div style="padding:16px 12px 12px;display:flex;flex-direction:column;gap:8px;flex:1">
+              <h3 style="margin:0;font-size:20px;line-height:1.2;font-weight:600">{{ p.name }}</h3>
+              <p style="margin:0;font-size:15px;line-height:1.5;color:#56607e;flex:1">{{ p.line }}</p>
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding-top:8px;border-top:1px solid #e3e8f2;margin-top:4px">
+                <span style="font-size:14px;color:#56607e">{{ p.who }}</span>
+                <span style="width:36px;height:36px;border-radius:50%;background:#2b5cf0;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0">↗</span>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+        <div style="background:linear-gradient(160deg,#2b5cf0,#1d3fb8);color:#fff;border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:14px">
+          <span style="font-weight:700;font-size:12px;letter-spacing:.08em;color:#c9d6fb">ORIENTACIÓN</span>
+          <h3 style="margin:auto 0 0;font-size:28px;line-height:1.15;font-weight:500">¿No sabes cuál programa elegir?</h3>
+          <p style="margin:0;font-size:16px;line-height:1.5;color:#dfe7ff">Cuéntanos tu situación y te orientamos.</p>
+          <button onClick="{{ goContacto }}" style="align-self:flex-start;min-height:50px;padding:0 22px;border:0;background:#fff;color:#0e1a3a;border-radius:999px;font-size:16px;font-weight:600;cursor:pointer">Escribir por WhatsApp</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modalidades -->
+  <section style="max-width:1320px;margin:0 auto;padding:96px 24px 0">
+    <div style="background:linear-gradient(160deg,#0b1a4d 0%,#1d3fb8 100%);color:#fff;border-radius:32px;padding:64px 48px;display:flex;flex-direction:column;gap:40px">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;align-items:end">
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <span style="font-weight:700;font-size:12px;letter-spacing:.08em;color:#9fb7ff">MODALIDADES</span>
+          <h2 style="margin:0;font-size:clamp(32px,3.6vw,48px);line-height:1.08;font-weight:500;letter-spacing:-.02em">Terapia adaptada a cada persona</h2>
+        </div>
+        <p style="margin:0;font-size:18px;line-height:1.55;color:#c9d6fb;max-width:46ch">Combina el lugar y el formato que mejor se ajuste a tu rutina y necesidades.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px">
+        <sc-for list="{{ mods }}" as="m" hint-placeholder-count="4">
+          <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:12px;min-height:220px">
+            <span style="font-weight:700;font-size:11px;letter-spacing:.08em;color:#9fb7ff">{{ m.axis }}</span>
+            <h3 style="margin:auto 0 0;font-size:28px;font-weight:500">{{ m.name }}</h3>
+            <p style="margin:0;font-size:16px;line-height:1.5;color:#c9d6fb">{{ m.text }}</p>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- Alcance internacional -->
+  <section style="max-width:1320px;margin:0 auto;padding:96px 24px 0">
+    <div style="background:#fff;border-radius:32px;padding:clamp(28px,4vw,56px);display:flex;flex-wrap:wrap;gap:40px;align-items:center">
+      <div style="display:flex;flex-direction:column;gap:20px;flex:1 1 280px;max-width:400px">
+        <span style="font-weight:700;font-size:12px;letter-spacing:.08em;color:#2b5cf0">ALCANCE INTERNACIONAL</span>
+        <h2 style="margin:0;font-size:clamp(32px,3.6vw,48px);line-height:1.08;font-weight:600;letter-spacing:-.02em;color:#0b1a4d">Una red presente en Latinoamérica</h2>
+        <p style="margin:0;font-size:19px;line-height:1.5;color:#0e1a3a;text-wrap:pretty">Atención presencial en cuatro países y online para toda la comunidad hispanohablante.</p>
+        <div style="align-self:flex-start;display:flex;align-items:center;gap:14px;padding:10px 18px;border:1.5px solid #c9d6fb;border-radius:999px;font-size:16px;font-weight:600;color:#0b1a4d">
+          <span style="display:flex;align-items:center;gap:6px"><svg width="18" height="18" viewBox="0 0 24 24" fill="#2b5cf0" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"></path></svg>Presencial</span>
+          <span style="width:1px;height:20px;background:#c9d6fb"></span>
+          <span style="display:flex;align-items:center;gap:6px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2b5cf0" stroke-width="2" aria-hidden="true"><rect x="4" y="5" width="16" height="11" rx="1.5"></rect><path d="M2 19h20"></path></svg>Online</span>
+        </div>
+      </div>
+      <div style="flex:3 1 560px;min-width:0;display:flex;flex-direction:column;gap:12px">
+      <div style="position:relative">
+        <img src="assets/alcance-collage.png" alt="Ilustraciones de México, República Dominicana, Panamá, Chile y Estados Unidos unidas por una línea curva" style="width:100%;height:auto;display:block;mix-blend-mode:multiply">
+        <span style="position:absolute;top:0;right:2%;padding:5px 12px;border-radius:999px;background:#ffd23f;color:#0b1a4d;font-size:13px;font-weight:700">Próximamente</span>
+      </div>
+      <ul style="list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0 6px;padding:0 2.66% 0 3.3%">
+        <sc-for list="{{ reach }}" as="r" hint-placeholder-count="5">
+          <li style="display:flex;flex-direction:column;align-items:center;gap:12px;position:relative">
+            <a href="{{ r.href }}" target="_blank" rel="noopener" title="Ver {{ r.name }} en el mapa" style="min-height:48px;padding:6px clamp(10px,1.4vw,20px);border-radius:999px;background:#2b5cf0;color:#fff;font-size:clamp(14px,1.4vw,18px);font-weight:700;line-height:1.1;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px;max-width:100%" style-hover="background:#1d3fb8">{{ r.name }}</a>
+            <div style="display:flex;align-items:center;gap:12px;padding:8px 16px;border:1.5px solid {{ r.tone }};border-radius:999px;color:{{ r.tone }}" title="{{ r.modes }}">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"></path></svg>
+              <span style="width:1px;height:18px;background:currentColor;opacity:.4"></span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="4" y="5" width="16" height="11" rx="1.5"></rect><path d="M2 19h20"></path></svg>
+            </div>
+          </li>
+        </sc-for>
+      </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Equipo y enfoque -->
+  <section style="max-width:1320px;margin:0 auto;padding:96px 24px 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:48px;align-items:center">
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <span style="font-weight:700;font-size:12px;letter-spacing:.08em;color:#2b5cf0">EQUIPO Y ENFOQUE</span>
+      <h2 style="margin:0;font-size:clamp(32px,3.6vw,48px);line-height:1.08;font-weight:500;letter-spacing:-.02em">Lo que nos <span style="color:#2b5cf0">diferencia</span></h2>
+      <p style="margin:0;font-size:18px;line-height:1.55;color:#56607e;max-width:44ch">Un equipo interdisciplinario que une arte y salud en cada plan terapéutico.</p>
+      <div style="position:relative;aspect-ratio:16/10;border-radius:24px;overflow:hidden;background:linear-gradient(160deg,#0b1a4d,#2b5cf0)">
+        <image-slot id="video-enfoque" shape="rect" placeholder="Video: ¿qué es la musicoterapia neurológica? (1–2 min)" style="position:absolute;inset:0"></image-slot>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <sc-for list="{{ diffs }}" as="d" hint-placeholder-count="3">
+        <div onClick="{{ d.go }}" style="display:flex;gap:18px;align-items:flex-start;padding:24px;border-radius:24px;cursor:pointer;background:{{ d.bg }};box-shadow:{{ d.shadow }};transition:background .2s,box-shadow .2s">
+          <span style="width:44px;height:44px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;background:{{ d.numBg }};color:{{ d.numFg }}">{{ d.num }}</span>
+          <div style="display:flex;flex-direction:column;gap:8px;padding-top:8px">
+            <h3 style="margin:0;font-size:22px;font-weight:600">{{ d.title }}</h3>
+            <sc-if value="{{ d.open }}" hint-placeholder-val="{{ false }}">
+              <p style="margin:0;font-size:16px;line-height:1.55;color:#56607e">{{ d.text }}</p>
+              <div style="display:flex;flex-wrap:wrap;gap:6px;padding-top:4px">
+                <sc-for list="{{ d.tags }}" as="t" hint-placeholder-count="3">
+                  <span style="padding:6px 12px;border-radius:999px;background:#e9effe;color:#2b5cf0;font-size:13px;font-weight:600">{{ t }}</span>
+                </sc-for>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+      </sc-for>
+      <a onClick="{{ goNosotros }}" style="display:flex;align-items:center;gap:10px;font-size:17px;font-weight:600;cursor:pointer;padding:16px 24px">Conocer al equipo<span style="width:36px;height:36px;border-radius:50%;border:1px solid #c9d6fb;display:flex;align-items:center;justify-content:center">→</span></a>
+    </div>
+  </section>
+
+  <!-- Testimonios -->
+  <section style="max-width:1320px;margin:0 auto;padding:96px 24px 0;display:flex;flex-direction:column;gap:40px">
+    <div style="display:flex;flex-direction:column;gap:16px;align-items:center;text-align:center">
+      <span style="font-weight:700;font-size:12px;letter-spacing:.08em;color:#2b5cf0">TESTIMONIOS</span>
+      <h2 style="margin:0;font-size:clamp(32px,3.6vw,48px);line-height:1.08;font-weight:500;letter-spacing:-.02em">Familias que ya dieron <span style="color:#2b5cf0">el primer paso</span></h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:16px">
+      <sc-for list="{{ testimonials }}" as="t" hint-placeholder-count="4">
+        <figure style="margin:0;background:#fff;border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:20px">
+          <figcaption style="display:flex;gap:12px;align-items:center">
+            <div style="width:44px;height:44px;border-radius:50%;background:#dfe7ff;flex-shrink:0"></div>
+            <div style="display:flex;flex-direction:column;gap:2px;font-size:15px"><strong>{{ t.who }}</strong><span style="color:#56607e">{{ t.meta }}</span></div>
+          </figcaption>
+          <blockquote style="margin:0;font-size:19px;line-height:1.5;font-weight:500;text-wrap:pretty">“{{ t.quote }}”</blockquote>
+        </figure>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- Preguntas frecuentes -->
+  <section style="max-width:1320px;margin:0 auto;padding:96px 24px 0">
+    <div style="background:#fff;border-radius:32px;padding:56px 48px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:48px">
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <span style="font-weight:700;font-size:12px;letter-spacing:.08em;color:#2b5cf0">PREGUNTAS FRECUENTES</span>
+        <h2 style="margin:0;font-size:clamp(32px,3.6vw,48px);line-height:1.08;font-weight:500;letter-spacing:-.02em">Antes de <span style="color:#2b5cf0">empezar</span></h2>
+        <p style="margin:0;font-size:18px;line-height:1.55;color:#56607e;max-width:36ch">Si tienes otra duda, escríbenos por WhatsApp.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <sc-for list="{{ homeFaq }}" as="q" hint-placeholder-count="5">
+          <div style="border-radius:20px;background:{{ q.bg }};transition:background .2s">
+            <button onClick="{{ q.go }}" style="width:100%;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 22px;border:0;background:transparent;font-size:18px;font-weight:600;color:#0e1a3a;text-align:left;cursor:pointer">{{ q.q }}<span style="width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:#2b5cf0;color:#fff;font-size:16px">{{ q.icon }}</span></button>
+            <sc-if value="{{ q.open }}" hint-placeholder-val="{{ false }}">
+              <p style="margin:0;padding:0 22px 22px;font-size:16px;line-height:1.55;color:#56607e;max-width:60ch">{{ q.a }}</p>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA final con formulario -->
+  <section style="max-width:1320px;margin:0 auto;padding:96px 24px 0">
+    <div style="background:linear-gradient(160deg,#2b5cf0 0%,#1d3fb8 100%);color:#fff;border-radius:32px;padding:56px 48px;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:40px;align-items:center">
+      <div style="display:flex;flex-direction:column;gap:18px">
+        <span style="font-weight:700;font-size:12px;letter-spacing:.08em;color:#c9d6fb">PRIMER PASO</span>
+        <h2 style="margin:0;font-size:clamp(32px,3.6vw,46px);line-height:1.1;font-weight:500;letter-spacing:-.02em">¿Recibiste un diagnóstico y no sabes por dónde empezar?</h2>
+        <p style="margin:0;font-size:18px;line-height:1.55;color:#dfe7ff;max-width:40ch">Déjanos tus datos y te contactamos para una conversación inicial.</p>
+      </div>
+      <div style="background:#fff;color:#0e1a3a;border-radius:28px;padding:32px;display:flex;flex-direction:column;gap:12px">
+        <h3 style="margin:0 0 4px;font-size:22px;font-weight:600">Agenda tu conversación inicial</h3>
+        <div style="min-height:54px;border-radius:999px;background:#f2f5fa;display:flex;align-items:center;padding:0 22px;font-size:16px;color:#56607e">Tu nombre</div>
+        <div style="min-height:54px;border-radius:999px;background:#f2f5fa;display:flex;align-items:center;padding:0 22px;font-size:16px;color:#56607e">WhatsApp o correo</div>
+        <div style="min-height:54px;border-radius:999px;background:#f2f5fa;display:flex;align-items:center;justify-content:space-between;padding:0 22px;font-size:16px;color:#56607e"><span>¿Para quién buscas ayuda?</span><span>▾</span></div>
+        <button style="min-height:56px;border:0;border-radius:999px;background:#0b1a4d;color:#fff;font-size:17px;font-weight:600;cursor:pointer">Quiero que me contacten</button>
+        <button onClick="{{ goContacto }}" style="min-height:50px;border:1px solid #d5ddef;border-radius:999px;background:#fff;color:#0e1a3a;font-size:16px;font-weight:600;cursor:pointer">Prefiero escribir por WhatsApp</button>
+      </div>
+    </div>
+  </section>
+</sc-if>
+
+<!-- ============ NOSOTROS ============ -->
+<sc-if value="{{ isNosotros }}" hint-placeholder-val="{{ false }}">
+  <section style="max-width:1320px;margin:0 auto;padding:24px 24px 0">
+    <div style="background:#fff;border-radius:32px;padding:64px 48px;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:40px;align-items:end">
+      <div style="display:flex;flex-direction:column;gap:18px">
+        <span style="font-weight:700;font-size:12px;letter-spacing:.08em;color:#2b5cf0">NOSOTROS</span>
+        <h1 style="margin:0;font-size:clamp(38px,4.6vw,60px);line-height:1.04;font-weight:500;letter-spacing:-.03em">La música como medicina, la ciencia como guía</h1>
+      </div>
+      <p style="margin:0;font-size:19px;line-height:1.55;color:#56607e">Párrafo de misión: quiénes somos, qué hacemos y para quién (2–3 líneas).</p>
+    </div>
+  </section>
+  <section style="max-width:1320px;margin:0 auto;padding:16px 24px 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px">
+    <sc-for list="{{ pillars }}" as="p" hint-placeholder-count="3">
+      <div style="background:{{ p.bg }};color:{{ p.fg }};border-radius:24px;padding:32px;display:flex;flex-direction:column;gap:12px;min-height:240px">
+        <span style="font-weight:700;font-size:12px;letter-spacing:.08em;opacity:.75">{{ p.k }}</span>
+        <h3 style="margin:auto 0 0;font-size:26px;font-weight:500">{{ p.title }}</h3>
+        <p style="margin:0;font-size:17px;line-height:1.5;opacity:.85">{{ p.text }}</p>
+      </div>
+    </sc-for>
+  </section>
+  <section style="max-width:1320px;margin:0 auto;padding:96px 24px 0;display:flex;flex-direction:column;gap:32px">
+    <div style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-end;justify-content:space-between">
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <span style="font-weight:700;font-size:12px;letter-spacing:.08em;color:#2b5cf0">EQUIPO</span>
+        <h2 style="margin:0;font-size:clamp(32px,3.6vw,48px);font-weight:500;letter-spacing:-.02em">Equipo por disciplina</h2>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;background:#fff;border-radius:999px;padding:6px">
+        <sc-for list="{{ countryChips }}" as="c" hint-placeholder-count="5">
+          <span style="min-height:40px;display:flex;align-items:center;padding:0 16px;border-radius:999px;font-size:15px;font-weight:600;background:{{ c.bg }};color:{{ c.fg }}">{{ c.name }}</span>
+        </sc-for>
+      </div>
+    </div>
+    <sc-for list="{{ disciplines }}" as="d" hint-placeholder-count="3">
+      <div style="background:#fff;border-radius:24px;padding:28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="width:44px;height:44px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#9fb7ff,#2b5cf0)"></div>
+          <h3 style="margin:8px 0 0;font-size:22px;font-weight:600">{{ d.name }}</h3>
+          <p style="margin:0;font-size:15px;color:#56607e;line-height:1.5">{{ d.text }}</p>
+        </div>
+        <sc-for list="{{ people }}" as="x" hint-placeholder-count="3">
+          <div style="border-radius:18px;padding:16px;display:flex;gap:12px;align-items:center;background:#f2f5fa">
+            <div style="width:48px;height:48px;border-radius:50%;background:#dfe7ff;flex-shrink:0"></div>
+            <div style="display:flex;flex-direction:column;gap:2px;font-size:15px"><strong>Nombre Apellido</strong><span style="color:#56607e">Cargo · {{ x }}</span></div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-for>
+  </section>
+  <section style="max-width:1320px;margin:0 auto;padding:96px 24px 0;display:flex;flex-direction:column;gap:24px">
+    <span style="font-weight:700;font-size:12px;letter-spacing:.08em;color:#2b5cf0;text-align:center">ALIANZAS E INSTITUCIONES</span>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px">
+      <sc-for list="{{ logos }}" as="l" hint-placeholder-count="6">
+        <div style="height:88px;background:#fff;border-radius:18px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;color:#9aa3bd">logo</div>
+      </sc-for>
+    </div>
+  </section>
+</sc-if>
+
+<!-- ============ PROGRAMAS ============ -->
+<sc-if value="{{ isProgramas }}" hint-placeholder-val="{{ false }}">
+  <section style="max-width:1320px;margin:0 auto;padding:24px 24px 0">
+    <div style="background:#fff;border-radius:32px;padding:56px 48px;display:flex;flex-direction:column;gap:24px">
+      <span style="font-weight:700;font-size:12px;letter-spacing:.08em;color:#2b5cf0">PROGRAMAS</span>
+      <h1 style="margin:0;font-size:clamp(38px,4.6vw,60px);font-weight:500;letter-spacing:-.03em;line-height:1.05">Programas terapéuticos</h1>
+      <p style="margin:0;font-size:19px;color:#56607e;max-width:56ch;line-height:1.55">Elige el área que mejor describe tu situación o la de tu familiar.</p>
+    </div>
+  </section>
+  <section style="max-width:1320px;margin:0 auto;padding:16px 24px 0;display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start">
+    <nav style="flex:1 1 280px;max-width:380px;position:sticky;top:96px;background:#fff;border-radius:24px;padding:12px;display:flex;flex-direction:column;gap:4px">
+      <span style="padding:12px 14px 8px;font-weight:700;font-size:11px;letter-spacing:.08em;color:#56607e">7 PROGRAMAS</span>
+      <sc-for list="{{ programTabs }}" as="p" hint-placeholder-count="7">
+        <button onClick="{{ p.go }}" style="display:flex;gap:14px;align-items:center;width:100%;padding:12px 14px;border:0;border-radius:16px;background:{{ p.bg }};color:{{ p.fg }};text-align:left;cursor:pointer;transition:background .2s" style-hover="background:#f2f5fa">
+          <span style="width:36px;height:36px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;background:{{ p.numBg }};color:{{ p.numFg }}">{{ p.num }}</span>
+          <span style="display:flex;flex-direction:column;gap:2px;min-width:0">
+            <span style="font-size:16px;font-weight:600;line-height:1.25">{{ p.name }}</span>
+            <span style="font-size:13px;opacity:.75">{{ p.who }}</span>
+          </span>
+        </button>
+      </sc-for>
+    </nav>
+    <div style="flex:999 1 480px;min-width:0;display:flex;flex-direction:column;gap:16px">
+      <div style="position:relative;aspect-ratio:16/9;border-radius:32px;overflow:hidden;background:#2b5cf0">
+        <image-slot id="prog-hero-{{ progNum }}" shape="rect" placeholder="Foto o video corto: cómo es una sesión" style="position:absolute;inset:0"></image-slot>
+      </div>
+      <div style="background:#fff;border-radius:24px;padding:40px;display:flex;flex-direction:column;gap:32px">
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <span style="font-weight:700;font-size:12px;letter-spacing:.08em;color:#2b5cf0">PROGRAMA {{ prog.num }} / 07</span>
+          <h2 style="margin:0;font-size:clamp(30px,3.2vw,42px);line-height:1.1;font-weight:500;letter-spacing:-.02em">{{ prog.name }}</h2>
+          <p style="margin:0;font-size:19px;line-height:1.55;color:#56607e">{{ prog.line }}</p>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px">
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <h3 style="margin:0;font-size:20px;font-weight:600">¿Para quién es?</h3>
+            <p style="margin:0;font-size:17px;line-height:1.55;color:#56607e">{{ prog.para }}</p>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <h3 style="margin:0;font-size:20px;font-weight:600">Qué trabajamos</h3>
+            <sc-for list="{{ objectives }}" as="o" hint-placeholder-count="4">
+              <div style="display:flex;gap:10px;align-items:center;font-size:17px"><span style="width:22px;height:22px;border-radius:50%;background:#e9effe;color:#2b5cf0;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0">✓</span>{{ o }}</div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <h3 style="margin:0;font-size:20px;font-weight:600">Evidencia científica</h3>
+          <sc-for list="{{ evidence }}" as="e" hint-placeholder-count="2">
+            <div style="padding:18px 20px;border-radius:18px;background:#f2f5fa;display:flex;flex-direction:column;gap:4px"><strong style="font-size:17px">{{ e.t }}</strong><span style="font-size:14px;color:#56607e">{{ e.m }}</span></div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">
+        <div style="background:linear-gradient(160deg,#2b5cf0,#1d3fb8);color:#fff;border-radius:24px;padding:32px;display:flex;flex-direction:column;gap:14px">
+          <h3 style="margin:0;font-size:26px;font-weight:500;line-height:1.2">Empieza con una conversación</h3>
+          <p style="margin:0;font-size:16px;line-height:1.5;color:#dfe7ff">Te explicamos el programa y vemos si es adecuado para ti.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:auto">
+            <button onClick="{{ goContacto }}" style="min-height:52px;padding:0 22px;border:0;background:#fff;color:#0e1a3a;border-radius:999px;font-size:16px;font-weight:600;cursor:pointer">Agendar conversación inicial</button>
+            <button onClick="{{ goContacto }}" style="min-height:52px;padding:0 22px;border:1px solid rgba(255,255,255,.4);background:transparent;color:#fff;border-radius:999px;font-size:16px;font-weight:600;cursor:pointer">WhatsApp</button>
+          </div>
+        </div>
+        <div style="background:#fff;border-radius:24px;padding:32px;display:flex;flex-direction:column;gap:12px">
+          <span style="font-size:40px;line-height:.6;color:#c9d6fb;font-weight:600">“</span>
+          <p style="margin:0;font-size:19px;line-height:1.45;font-weight:500">Cita breve de una familia de este programa.</p>
+          <span style="font-size:14px;color:#56607e">Nombre · País</span>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:12px;border-top:1px solid #e3e8f2">
+            <sc-for list="{{ modChips }}" as="m" hint-placeholder-count="4">
+              <span style="padding:6px 12px;border-radius:999px;background:#e9effe;color:#2b5cf0;font-size:14px;font-weight:600">{{ m }}</span>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</sc-if>
+
+<!-- ============ EDUCACIÓN ============ -->
+<sc-if value="{{ isEducacion }}" hint-placeholder-val="{{ false }}">
+  <section style="max-width:1320px;margin:0 auto;padding:24px 24px 0">
+    <div style="background:#fff;border-radius:32px;padding:56px 48px;display:flex;flex-direction:column;gap:24px">
+      <span style="font-weight:700;font-size:12px;letter-spacing:.08em;color:#2b5cf0">EDUCACIÓN Y FORMACIÓN</span>
+      <h1 style="margin:0;font-size:clamp(38px,4.6vw,60px);font-weight:500;letter-spacing:-.03em;line-height:1.05">Cursos y diplomados</h1>
+      <p style="margin:0;font-size:19px;color:#56607e;max-width:58ch;line-height:1.55">Formación para profesionales de la salud, la educación y las artes, y para cuidadores.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;align-self:flex-start;background:#f2f5fa;border-radius:999px;padding:6px">
+        <sc-for list="{{ eduFilters }}" as="f" hint-placeholder-count="4">
+          <span style="min-height:42px;display:flex;align-items:center;padding:0 18px;border-radius:999px;font-size:15px;font-weight:600;background:{{ f.bg }};color:{{ f.fg }}">{{ f.name }}</span>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+  <section style="max-width:1320px;margin:0 auto;padding:16px 24px 0;display:flex;flex-direction:column;gap:16px">
+    <div style="background:linear-gradient(160deg,#0b1a4d,#1d3fb8);color:#fff;border-radius:32px;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));overflow:hidden">
+      <div style="position:relative;min-height:340px">
+        <image-slot id="edu-destacado" shape="rect" placeholder="Imagen del diplomado" style="position:absolute;inset:0"></image-slot>
+      </div>
+      <div style="padding:48px 40px;display:flex;flex-direction:column;gap:16px">
+        <span style="align-self:flex-start;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.14);font-size:13px;font-weight:600">Inscripciones abiertas</span>
+        <h2 style="margin:0;font-size:36px;font-weight:500;line-height:1.1;letter-spacing:-.02em">Diplomado en Musicoterapia Neurológica</h2>
+        <p style="margin:0;font-size:17px;line-height:1.55;color:#c9d6fb">Descripción breve del diplomado, a quién está dirigido y qué certificación entrega.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <span style="padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.25);font-size:14px">Inicio: [fecha]</span>
+          <span style="padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.25);font-size:14px">[X meses]</span>
+          <span style="padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.25);font-size:14px">Online en vivo</span>
+        </div>
+        <div><button style="display:flex;align-items:center;gap:12px;min-height:56px;padding:0 8px 0 24px;border:0;background:#fff;color:#0e1a3a;border-radius:999px;font-size:17px;font-weight:600;cursor:pointer">Ver programa e inscribirme<span style="width:40px;height:40px;border-radius:50%;background:#2b5cf0;color:#fff;display:flex;align-items:center;justify-content:center">→</span></button></div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px">
+      <sc-for list="{{ courses }}" as="c" hint-placeholder-count="4">
+        <div style="background:#fff;border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:12px;min-height:240px">
+          <span style="align-self:flex-start;padding:6px 12px;border-radius:999px;background:#e9effe;color:#2b5cf0;font-size:12px;font-weight:700;letter-spacing:.04em">{{ c.type }}</span>
+          <h3 style="margin:auto 0 0;font-size:22px;line-height:1.25;font-weight:600">{{ c.name }}</h3>
+          <p style="margin:0;font-size:15px;color:#56607e">{{ c.meta }}</p>
+          <span style="font-size:16px;font-weight:600;color:#2b5cf0">Ver detalle →</span>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+  <section style="max-width:1320px;margin:0 auto;padding:96px 24px 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:48px">
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <span style="font-weight:700;font-size:12px;letter-spacing:.08em;color:#2b5cf0">PARA INSTITUCIONES</span>
+      <h2 style="margin:0;font-size:clamp(30px,3.2vw,42px);font-weight:500;letter-spacing:-.02em;line-height:1.1">Capacitación a medida para equipos</h2>
+      <p style="margin:0;font-size:17px;line-height:1.55;color:#56607e">ELEAM, hospitales y empresas.</p>
+      <div><button onClick="{{ goContacto }}" style="min-height:54px;padding:0 24px;border:0;background:#2b5cf0;color:#fff;border-radius:999px;font-size:17px;font-weight:600;cursor:pointer">Solicitar propuesta</button></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <sc-for list="{{ eduFaq }}" as="q" hint-placeholder-count="4">
+        <div style="background:#fff;border-radius:18px;padding:20px 24px;display:flex;justify-content:space-between;align-items:center;gap:16px;font-size:18px;font-weight:500"><span>{{ q }}</span><span style="width:32px;height:32px;border-radius:50%;background:#e9effe;color:#2b5cf0;display:flex;align-items:center;justify-content:center">+</span></div>
+      </sc-for>
+    </div>
+  </section>
+</sc-if>
+
+
+
+<!-- ============ CONTACTO ============ -->
+<sc-if value="{{ isContacto }}" hint-placeholder-val="{{ false }}">
+  <section style="max-width:1320px;margin:0 auto;padding:24px 24px 0">
+    <div style="background:#fff;border-radius:32px;padding:56px 48px;display:flex;flex-direction:column;gap:32px">
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <span style="font-weight:700;font-size:12px;letter-spacing:.08em;color:#2b5cf0">CONTACTO</span>
+        <h1 style="margin:0;font-size:clamp(38px,4.6vw,60px);font-weight:500;letter-spacing:-.03em;line-height:1.05">Hablemos</h1>
+        <p style="margin:0;font-size:19px;color:#56607e;max-width:52ch;line-height:1.55">Elige la forma que te resulte más cómoda.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">
+        <sc-for list="{{ contactWays }}" as="c" hint-placeholder-count="3">
+          <div style="background:{{ c.bg }};color:{{ c.fg }};border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:12px;min-height:260px">
+            <span style="font-weight:700;font-size:11px;letter-spacing:.08em;opacity:.75">{{ c.k }}</span>
+            <h2 style="margin:auto 0 0;font-size:28px;font-weight:500">{{ c.title }}</h2>
+            <p style="margin:0;font-size:16px;line-height:1.5;opacity:.85">{{ c.text }}</p>
+            <button style="min-height:54px;border:0;background:{{ c.btnBg }};color:{{ c.btnFg }};border-radius:999px;font-size:17px;font-weight:600;cursor:pointer">{{ c.cta }}</button>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+  <section style="max-width:1320px;margin:0 auto;padding:16px 24px 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px;align-items:start">
+    <div style="background:#fff;border-radius:32px;padding:40px;display:flex;flex-direction:column;gap:18px">
+      <h2 style="margin:0;font-size:28px;font-weight:500">Formulario</h2>
+      <sc-for list="{{ formFields }}" as="f" hint-placeholder-count="5">
+        <label style="display:flex;flex-direction:column;gap:8px;font-size:16px;font-weight:600">{{ f.label }}
+          <div style="min-height:{{ f.h }};border-radius:{{ f.r }};background:#f2f5fa;padding:15px 22px;font-size:16px;font-weight:400;color:#56607e">{{ f.ph }}</div>
+        </label>
+      </sc-for>
+      <button style="min-height:58px;border:0;background:#2b5cf0;color:#fff;border-radius:999px;font-size:18px;font-weight:600;cursor:pointer">Enviar mensaje</button>
+      <span style="font-size:15px;color:#56607e">Respondemos en un plazo de [X] horas hábiles.</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div style="background:#fff;border-radius:32px;padding:32px;display:flex;flex-direction:column;gap:12px">
+        <h2 style="margin:0 0 4px;font-size:24px;font-weight:500">Por país</h2>
+        <sc-for list="{{ countries }}" as="c" hint-placeholder-count="4">
+          <div style="padding:16px 20px;border-radius:18px;background:#f2f5fa;display:flex;flex-direction:column;gap:4px">
+            <strong style="font-size:18px">{{ c.name }}</strong>
+            <span style="font-size:15px;color:#56607e">Ciudad · teléfono / WhatsApp · horario local</span>
+          </div>
+        </sc-for>
+      </div>
+      <div style="background:#fff;border-radius:32px;padding:32px;display:flex;flex-direction:column;gap:8px">
+        <h2 style="margin:0 0 8px;font-size:24px;font-weight:500">Preguntas frecuentes</h2>
+        <sc-for list="{{ faq }}" as="q" hint-placeholder-count="4">
+          <div style="padding:16px 0;border-bottom:1px solid #e3e8f2;display:flex;justify-content:space-between;align-items:center;gap:16px;font-size:17px;font-weight:500"><span>{{ q }}</span><span style="width:30px;height:30px;border-radius:50%;background:#e9effe;color:#2b5cf0;display:flex;align-items:center;justify-content:center">+</span></div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+</sc-if>
+
+</main>
+
+<!-- FOOTER -->
+<footer style="max-width:1320px;width:100%;margin:96px auto 0;padding:0 24px 24px">
+  <div style="background:#0b1a4d;color:#fff;border-radius:32px;padding:40px 48px 28px;display:flex;flex-direction:column;gap:32px;overflow:hidden">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:32px;font-size:16px">
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <img src="assets/logo-red-neuromusical.png" alt="Red Neuromusical" style="height:56px;width:auto;display:block;align-self:flex-start;margin-left:-12px;filter:brightness(0) invert(1)">
+        <span style="color:#9fb7ff">La música como medicina, la ciencia como guía</span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start">
+        <sc-for list="{{ nav }}" as="n" hint-placeholder-count="7"><button onClick="{{ n.go }}" style="min-height:38px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,255,255,.2);background:transparent;color:#fff;font-size:14px;cursor:pointer">{{ n.label }}</button></sc-for>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;color:#c9d6fb">
+        <span>WhatsApp</span><span>Correo</span><span>Instagram · Facebook · LinkedIn</span>
+      </div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;font-size:14px;color:#9fb7ff;padding-top:20px;border-top:1px solid rgba(255,255,255,.12)">
+      <span>México · Panamá · Chile · República Dominicana</span>
+      <span>Política de privacidad · Términos</span>
+    </div>
+  </div>
+</footer>
+
+<sc-if value="{{ showFloat }}" hint-placeholder-val="{{ true }}">
+  <button onClick="{{ goContacto }}" style="position:fixed;right:24px;bottom:24px;z-index:30;min-height:60px;padding:0 24px;border-radius:999px;border:0;background:#2b5cf0;color:#fff;font-size:17px;font-weight:600;box-shadow:0 10px 30px rgba(43,92,240,.35);cursor:pointer">WhatsApp</button>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showNotes&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Revisión&quot;},&quot;showWhatsAppFloat&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Revisión&quot;}}">
+const B = '#2b5cf0', INK = '#0e1a3a';
+const PAGES = [
+  ['inicio','Inicio'],['nosotros','Nosotros'],['programas','Programas'],['educacion','Educación y Formación'],
+  ['contacto','Contacto']
+];
+const SLIDES = [
+  { a:'La música como ', b:'medicina', c:', la ciencia como ', d:'guía', sub:'Musicoterapia y neurorrehabilitación para personas con Alzheimer, Parkinson, afasia, secuelas de ACV y más.' },
+  { a:'Acompañamos a ', b:'quienes cuidan', c:'', d:'', sub:'Si tu familiar recibió un diagnóstico, te orientamos desde la primera conversación.' },
+  { a:'Online o presencial, ', b:'en 4 países', c:'', d:'', sub:'Sesiones individuales y grupales en México, Panamá, Chile y República Dominicana.' }
+];
+const PROGRAMS = [
+  { name:'Lenguaje, habla y comunicación', line:'Afasia, disartria y dificultades de comunicación tras un ACV o lesión.', para:'Personas con afasia u otras alteraciones del habla y sus familias.' },
+  { name:'Instituciones geriátricas', line:'Programas grupales para ELEAM y residencias de adultos mayores.', para:'ELEAM, residencias y centros de día.' },
+  { name:'Área cognitiva', line:'Estimulación de memoria y atención en Alzheimer y otras demencias.', para:'Personas con deterioro cognitivo o demencia y sus cuidadores.' },
+  { name:'Parkinson y otros trastornos del movimiento', line:'Ritmo y música para trabajar marcha, equilibrio y voz.', para:'Personas con Parkinson u otros trastornos del movimiento.' },
+  { name:'Adulto mayor sano', line:'Actividades preventivas para mantener la mente activa y el vínculo social.', para:'Adultos mayores sin diagnóstico que buscan prevención.' },
+  { name:'Bienestar corporativo', line:'Talleres con música para el manejo del estrés y el trabajo en equipo.', para:'Empresas y equipos de trabajo.' },
+  { name:'Neurodiversidad', line:'Acompañamiento a personas neurodivergentes y sus familias.', para:'Niños, jóvenes y adultos neurodivergentes.' }
+].map((p,i)=>({ ...p, num: String(i+1).padStart(2,'0'), who: ['Afasia · ACV','ELEAM · residencias','Alzheimer · demencias','Parkinson','Prevención','Empresas','Familias y personas'][i] }));
+const MAP = q=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q);
+const REACH = [['México','mx'],['República Dominicana','rd'],['Panamá','pa'],['Chile','cl'],['EE. UU.','us','Estados Unidos']].map(([name,k,q])=>({name,img:'assets/pais-'+k+'.png',href:MAP(q||name),soon:k==='us',tone:k==='us'?'#b5bccb':'#2b5cf0',modes:k==='us'?'Próximamente':'Presencial · Online'}));
+const COUNTRIES = ['México','Panamá','Chile','República Dominicana'].map(name=>({name,tag:'Online · Presencial'}));
+const DISCIPLINES = [
+  {name:'Musicoterapia',text:'Diseño y conducción de las sesiones.'},
+  {name:'Neurociencias',text:'Fundamento clínico y evaluación.'},
+  {name:'Fonoaudiología',text:'Lenguaje, habla y deglución.'},
+  {name:'Psicología',text:'Acompañamiento emocional y duelo.'},
+  {name:'Artes',text:'Danza, artes visuales y expresión.'}
+];
+const chip = (name, on) => ({ name, bg: on ? B : 'transparent', fg: on ? '#fff' : INK });
+const chipW = (name, on) => ({ name, bg: on ? B : '#f2f5fa', fg: on ? '#fff' : INK });
+
+class Component extends DCLogic {
+  state = { page:'inicio', slide:0, lang:'es', prog:0, diff:0, faq:0 };
+  go = (page) => () => { this.setState({ page }); window.scrollTo(0,0); };
+  renderVals() {
+    const { page, slide, lang, prog, diff, faq } = this.state;
+    return {
+      showNotes: this.props.showNotes ?? false, showFloat: this.props.showWhatsAppFloat ?? true,
+      nav: PAGES.map(([id,label]) => ({ label, go:this.go(id), bg: id===page ? '#fff' : 'transparent', fg: id===page ? B : INK, shadow: id===page ? '0 2px 8px rgba(14,26,58,.08)' : 'none' })),
+      toggleLang:()=>this.setState(s=>({lang:s.lang==='es'?'en':'es'})), langLabel: lang==='es'?'ES':'EN',
+      isInicio: page==='inicio', isNosotros: page==='nosotros', isProgramas: page==='programas', isEducacion: page==='educacion',
+      isTestimonios: page==='testimonios', isBlog: page==='blog', isContacto: page==='contacto',
+      goHome:this.go('inicio'), goContacto:this.go('contacto'), goProgramas:this.go('programas'), goNosotros:this.go('nosotros'),
+      goTestimonios:this.go('testimonios'), goBlog:this.go('blog'),
+      setES:()=>this.setState({lang:'es'}), setEN:()=>this.setState({lang:'en'}),
+      esBg: lang==='es'?'#fff':'transparent', esFg: lang==='es'?B:'#56607e', enBg: lang==='en'?'#fff':'transparent', enFg: lang==='en'?B:'#56607e',
+      slide: SLIDES[slide],
+      prevSlide:()=>this.setState(s=>({slide:(s.slide+2)%3})), nextSlide:()=>this.setState(s=>({slide:(s.slide+1)%3})),
+      dots: SLIDES.map((_,i)=>({ bg: i===slide?B:'#c9d6fb', w: i===slide?'32px':'10px', go:()=>this.setState({slide:i}) })),
+      steps: [
+        {title:'Escríbenos',text:'Por WhatsApp, formulario o agenda directa. Como te resulte más fácil.'},
+        {title:'Conversación inicial',text:'Hablamos sobre el diagnóstico, las necesidades y lo que esperas lograr.'},
+        {title:'Plan personalizado',text:'Te proponemos un programa, modalidad y frecuencia adecuados.'},
+        {title:'Comienzan las sesiones',text:'Online o presencial, con seguimiento de los avances.'}
+      ].map((s,i)=>({...s,num:String(i+1).padStart(2,'0')})),
+      programs: PROGRAMS,
+      diffs: [
+        {title:'Basado en evidencia',text:'Cada programa se apoya en investigación en neurociencia y musicoterapia, con objetivos medibles.',tags:['Protocolos','Evaluación','Seguimiento']},
+        {title:'Equipo interdisciplinario',text:'Profesionales del arte y de la salud trabajan juntos en cada plan.',tags:['Musicoterapia','Neurociencias','Fonoaudiología','Psicología','Artes']},
+        {title:'La familia en el centro',text:'Orientamos a cuidadores y familiares para continuar el trabajo en casa.',tags:['Guía para cuidadores','Acompañamiento']}
+      ].map((d,i)=>({...d,num:String(i+1).padStart(2,'0'),open:i===diff,go:()=>this.setState({diff:i}),bg:i===diff?'#fff':'transparent',shadow:i===diff?'0 12px 30px rgba(14,26,58,.07)':'none',numBg:i===diff?B:'#e9effe',numFg:i===diff?'#fff':B})),
+      homeFaq: ['¿Qué es la musicoterapia neurológica?','¿Necesita la persona saber música?','¿Cómo funcionan las sesiones online?','¿Necesito una derivación médica?','¿Cuánto dura un proceso terapéutico?'].map((q,i)=>({q,a:'Respuesta breve en lenguaje claro (2–3 líneas).',open:i===faq,icon:i===faq?'−':'+',bg:i===faq?'#f2f5fa':'transparent',go:()=>this.setState(s=>({faq:s.faq===i?-1:i}))})),
+      mods: [
+        {axis:'DÓNDE',name:'Online',text:'Desde casa, con apoyo al cuidador para conectarse.'},
+        {axis:'DÓNDE',name:'Presencial',text:'En centros, domicilios o instituciones.'},
+        {axis:'CÓMO',name:'Individual',text:'Un plan centrado en una sola persona.'},
+        {axis:'CÓMO',name:'Grupal',text:'Sesiones en grupo, comunidades e instituciones.'}
+      ],
+      modChips: ['Online','Presencial','Individual','Grupal'],
+      countries: COUNTRIES, reach: REACH, disciplines: DISCIPLINES,
+      testimonials: [
+        {quote:'Texto de ejemplo: después de unas semanas mi mamá volvió a cantar canciones que creíamos olvidadas.',who:'Nombre',meta:'Hija de paciente con Alzheimer · Chile'},
+        {quote:'Texto de ejemplo: el ritmo le ayudó a caminar con más seguridad.',who:'Nombre',meta:'Esposa de paciente con Parkinson · México'},
+        {quote:'Texto de ejemplo: con el canto, mi papá recuperó palabras que había perdido tras el ACV.',who:'Nombre',meta:'Hijo de paciente con afasia · Panamá'},
+        {quote:'Texto de ejemplo: las sesiones grupales cambiaron el ánimo de toda la residencia.',who:'Nombre',meta:'Directora de ELEAM · Rep. Dominicana'}
+      ],
+      pillars: [
+        {k:'MÚSICA',title:'La música como medicina',text:'Cómo usamos la música y las artes con objetivos terapéuticos.',bg:'#fff',fg:INK},
+        {k:'CIENCIA',title:'La ciencia como guía',text:'Protocolos basados en evidencia y medición de resultados.',bg:B,fg:'#fff'},
+        {k:'PERSONAS',title:'Cercanía con las familias',text:'El cuidador como parte activa del proceso.',bg:'#fff',fg:INK}
+      ],
+      countryChips: ['Todos','México','Panamá','Chile','Rep. Dominicana'].map((n,i)=>chip(n,i===0)),
+      people: ['País','País','País'], logos: [1,2,3,4,5,6],
+      programTabs: PROGRAMS.map((p,i)=>({ ...p, bg: i===prog?'#e9effe':'transparent', fg: INK, numBg: i===prog?B:'#f2f5fa', numFg: i===prog?'#fff':B, go:()=>{ this.setState({prog:i}); window.scrollTo({top:0,behavior:'smooth'}); } })),
+      prog: PROGRAMS[prog], progNum: prog+1,
+      objectives: ['Objetivo terapéutico 1','Objetivo terapéutico 2','Objetivo terapéutico 3','Apoyo y guía para la familia'],
+      evidence: [{t:'Título del estudio de referencia',m:'Autores · revista · año · enlace DOI'},{t:'Título del estudio de referencia',m:'Autores · revista · año · enlace DOI'}],
+      eduFilters: ['Todos','Diplomados','Cursos','Para cuidadores'].map((n,i)=>chip(n,i===0)),
+      courses: [
+        {type:'CURSO',name:'Musicoterapia en demencias',meta:'Online · [X semanas] · inicio [fecha]'},
+        {type:'CURSO',name:'Ritmo y movimiento en Parkinson',meta:'Online · [X semanas] · inicio [fecha]'},
+        {type:'CURSO',name:'Música y comunicación en afasia',meta:'Híbrido · [X semanas] · inicio [fecha]'},
+        {type:'TALLER',name:'Herramientas musicales para cuidadores',meta:'Online · [X sesiones] · inicio [fecha]'}
+      ],
+      eduFaq: ['¿Quién puede inscribirse?','¿Entregan certificado?','¿Las clases quedan grabadas?','¿Cuáles son las formas de pago?'],
+      testiFilters: ['Todos','Familias','Pacientes','Instituciones','Por programa ▾'].map((n,i)=>chip(n,i===0)),
+      testimonialsAll: PROGRAMS.slice(0,6).map(p=>({prog:p.name,quote:'Cita breve de la experiencia (2–3 líneas).',who:'Nombre',meta:'relación · país'})),
+      blogCats: ['Todo','Estudios científicos','Guías para cuidadores','Noticias'].map((n,i)=>chip(n,i===0)),
+      posts: [
+        {cat:'ESTUDIOS CIENTÍFICOS',title:'Qué dice la evidencia sobre música y afasia',min:'5 min'},
+        {cat:'GUÍAS PARA CUIDADORES',title:'Cómo usar la música en casa con una persona con Alzheimer',min:'4 min'},
+        {cat:'ESTUDIOS CIENTÍFICOS',title:'Estimulación rítmica auditiva en Parkinson',min:'6 min'},
+        {cat:'NOTICIAS',title:'Nuevo programa grupal en [país]',min:'2 min'},
+        {cat:'GUÍAS PARA CUIDADORES',title:'Música y acompañamiento en cuidados paliativos',min:'5 min'},
+        {cat:'ESTUDIOS CIENTÍFICOS',title:'Música y neurodiversidad: revisión de estudios',min:'7 min'}
+      ].map((p,i)=>({...p,id:i+1})),
+      contactWays: [
+        {k:'MÁS RÁPIDO',title:'WhatsApp',text:'Escríbenos y te respondemos en horario hábil.',cta:'Abrir WhatsApp',bg:'#f2f5fa',fg:INK,btnBg:'#fff',btnFg:INK},
+        {k:'RECOMENDADO',title:'Conversación inicial',text:'Elige día y hora para una videollamada o llamada.',cta:'Agendar una conversación inicial',bg:B,fg:'#fff',btnBg:'#fff',btnFg:INK},
+        {k:'POR ESCRITO',title:'Formulario',text:'Cuéntanos tu situación y te contactamos.',cta:'Ir al formulario',bg:'#f2f5fa',fg:INK,btnBg:'#fff',btnFg:INK}
+      ],
+      formFields: [
+        {label:'Nombre',ph:'Tu nombre',h:'54px',r:'999px'},
+        {label:'¿Para quién buscas ayuda?',ph:'Para mí · Para un familiar · Para una institución ▾',h:'54px',r:'999px'},
+        {label:'País',ph:'Selecciona ▾',h:'54px',r:'999px'},
+        {label:'WhatsApp o correo',ph:'Cómo prefieres que te contactemos',h:'54px',r:'999px'},
+        {label:'Cuéntanos brevemente (opcional)',ph:'Diagnóstico, edad, lo que te preocupa…',h:'130px',r:'22px'}
+      ],
+      faq: ['¿Cuánto cuesta una sesión?','¿Necesito una derivación médica?','¿Cómo funcionan las sesiones online?','¿Atienden a domicilio?']
+    };
+  }
+}
+</script>
+</body>
+</html>
